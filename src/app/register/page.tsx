@@ -7,7 +7,6 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [type, setType] = useState('client'); // Novo estado para o tipo de usuário
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -18,10 +17,11 @@ export default function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password, type }), // Inclui o type na requisição
+        body: JSON.stringify({ name, email, password }),
       });
 
       if (response.ok) {
+        const data = await response.json();
         alert('Usuário criado com sucesso!');
         router.push('/login');  // Redireciona para a página de login
       } else {
@@ -58,17 +58,8 @@ export default function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Digite sua senha"
-          className="mb-4 w-full px-4 py-2 border rounded-lg"
-        />
-
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
           className="mb-6 w-full px-4 py-2 border rounded-lg"
-        >
-          <option value="client">Client</option>
-          <option value="admin">Admin</option>
-        </select>
+        />
 
         <button
           onClick={handleRegister}
